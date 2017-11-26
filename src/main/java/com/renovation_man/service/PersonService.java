@@ -12,13 +12,22 @@ import com.renovation_man.repository.IPersonRepository;
 
 @Service
 @Transactional
-public class PersonService implements IPersonService {
-	@Autowired
-	IPersonRepository personRepository;
+public class PersonService implements IUserService<Person> {
+    @Autowired
+    IPersonRepository personRepository;
 
-	@Override
-	public List<Person> findAllPersons() {
-		return personRepository.findAll();
-	}
+    @Override
+    public List<Person> findAll() {
+        return personRepository.findAll();
+    }
 
+    @Override
+    public Person save(Person person) {
+        return personRepository.save(person);
+    }
+
+    @Override
+    public Person findById(Integer id) {
+        return personRepository.findById(id);
+    }
 }

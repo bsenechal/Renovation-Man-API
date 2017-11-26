@@ -13,22 +13,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(scanBasePackages = "com.renovation_man")
 @Configuration
 @EnableAutoConfiguration
-@EntityScan(basePackages = {"com.renovation_man"})
-@EnableJpaRepositories(basePackages = {"com.renovation_man"})
+@EntityScan(basePackages = { "com.renovation_man.model" })
+@EnableJpaRepositories(basePackages = { "com.renovation_man.repository" })
 @EnableTransactionManagement
 public class Application extends SpringBootServletInitializer {
 
-	
-	@Override
-	protected SpringApplicationBuilder configure(
-			SpringApplicationBuilder application) {
-		return application.sources(Application.class);
-	}
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        
-        
+
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
     }
 
 }

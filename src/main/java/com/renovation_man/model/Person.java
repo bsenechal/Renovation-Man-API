@@ -21,7 +21,35 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "PERSON")
 @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ")
 public class Person extends User {
-    @Transient
+	
+    public Person() {
+	}
+    
+    public Person(String type, String firstName, String lastName, Date dateOfBirth) {
+    	super.setType(type);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+	}
+    
+    public Person(Integer id, String type, String firstName, String lastName, Date dateOfBirth) {
+    	super.setId(id);
+    	super.setType(type);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+	}
+
+    public Person(Person person) {
+    	super.setId(person.getId());
+    	super.setType(person.getType());
+		this.firstName = person.getFirstName();
+		this.lastName = person.getLastName();
+		this.dateOfBirth = person.getDateOfBirth();
+	}
+    
+
+	@Transient
     private static final long serialVersionUID = -9002958958260404193L;
 
     @NotNull
@@ -84,5 +112,59 @@ public class Person extends User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime * result
+				+ ((super.getId() == null) ? 0 : super.getId().hashCode());
+		result = prime * result
+				+ ((super.getType() == null) ? 0 : super.getType().hashCode());
+		result = prime * result
+				+ ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+		result = prime * result
+				+ ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result
+				+ ((lastName == null) ? 0 : lastName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (super.getId() == null) {
+			if (other.getId() != null)
+				return false;
+		} else if (!super.getId().equals(other.getId() ))
+			return false;
+		if (super.getType() == null) {
+			if (other.getType() != null)
+				return false;
+		} else if (!super.getType().equals(other.getType() ))
+			return false;
+		if (dateOfBirth == null) {
+			if (other.dateOfBirth != null)
+				return false;
+		} 
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		return true;
+	}
 
 }

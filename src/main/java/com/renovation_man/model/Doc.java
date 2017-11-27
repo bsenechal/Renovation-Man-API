@@ -2,10 +2,7 @@ package com.renovation_man.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -14,13 +11,11 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "DOCUMENTS")
-@SequenceGenerator(name = "DOC_SEQ", sequenceName = "DOC_SEQ")
 public class Doc {
     @Transient
     private static final long serialVersionUID = -9002958958260404193L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DOC_SEQ")
     @Column(name = "ID", precision = 12, scale = 0)
     private Integer id;
     
@@ -38,7 +33,17 @@ public class Doc {
     @Column(name = "AUTHOR_ID", precision = 12, scale = 0)
     private Integer authorId;
 
-    /**
+    public Doc(){}
+    
+    public Doc(Integer id, Integer versionNumber, String text, Integer authorId) {
+		super();
+		this.id = id;
+		this.versionNumber = versionNumber;
+		this.text = text;
+		this.authorId = authorId;
+	}
+
+	/**
      * @return the id
      */
     public Integer getId() {

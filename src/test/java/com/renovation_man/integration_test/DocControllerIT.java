@@ -72,7 +72,7 @@ public class DocControllerIT {
 
         Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("Incorrect id", new Integer(1), response.getBody().getId());
-        Assert.assertEquals("Incorrect version number", new Integer(0), response.getBody().getVersionNumber());
+        Assert.assertEquals("Incorrect version number", new Integer(1), response.getBody().getVersionNumber());
         Assert.assertEquals("Incorrect text", doc.getText(), response.getBody().getText());
         Assert.assertEquals("Incorrect author id", doc.getAuthorId(), response.getBody().getAuthorId());
     }
@@ -94,7 +94,7 @@ public class DocControllerIT {
                 HttpMethod.POST, entity, Doc.class);
 
         doc.setId(1);
-        doc.setVersionNumber(1);
+        doc.setVersionNumber(2);
         
         Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("Incorrect response", doc, response.getBody());

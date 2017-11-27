@@ -12,6 +12,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.data.annotation.Version;
+
 @Entity
 @Table(name = "DOCUMENTS")
 @SequenceGenerator(name = "DOC_SEQ", sequenceName = "DOC_SEQ")
@@ -26,6 +28,7 @@ public class Doc implements Serializable {
     
     @Id
     @Column(name = "VERSION_NUMBER", precision = 12, scale = 0)
+    @Version
     private Integer versionNumber;
     
     @Size(max = 2000)
@@ -115,4 +118,49 @@ public class Doc implements Serializable {
     public void setAuthorId(Integer authorId) {
         this.authorId = authorId;
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((authorId == null) ? 0 : authorId.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result
+				+ ((versionNumber == null) ? 0 : versionNumber.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Doc other = (Doc) obj;
+		if (authorId == null) {
+			if (other.authorId != null)
+				return false;
+		} else if (!authorId.equals(other.authorId))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (versionNumber == null) {
+			if (other.versionNumber != null)
+				return false;
+		} else if (!versionNumber.equals(other.versionNumber))
+			return false;
+		return true;
+	}
 }

@@ -19,4 +19,10 @@ public interface IDocRepository extends CrudRepository<Doc, Long> {
     
     @Query("SELECT d FROM Doc d WHERE d.id = :id and version_number = (select max(d2.versionNumber) from Doc d2)")
     public Doc findLastVersionById(@Param("id") Integer id);
+    
+    @Query("SELECT max(versionNumber) FROM Doc d WHERE d.id = :id")
+    public Integer findLastVersionNumberForId(@Param("id") Integer id);
+    
+    @Query("SELECT max(id) FROM Doc d")
+    public Integer findMaxId();
 }

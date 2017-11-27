@@ -23,6 +23,24 @@ public class DocService implements IDocService {
 
     @Override
     public Doc save(Doc doc) {
+    	Integer versionNumber = docRepository.findLastVersionNumberForId(doc.getId());
+    	
+    	
+    	if (doc.getId() == null) {
+    		Integer maxId = docRepository.findMaxId();
+    		
+    		doc.setId(maxId != null ? maxId + 1 : 1);
+    		doc.setVersionNumber(1);
+    	} else {
+        	if (versionNumber != null) {
+        		doc.setVersionNumber(versionNumber + 1);
+        	}
+    	}
+    	
+
+    	
+
+    	
 		return docRepository.save(doc);
     }
 

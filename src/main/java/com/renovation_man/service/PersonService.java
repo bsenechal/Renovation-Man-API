@@ -22,12 +22,12 @@ public class PersonService implements IUserService<Person> {
     }
 
     @Override
-    public Person save(Person person) {
-        return personRepository.save(person);
+    public Person findById(final Integer id) {
+        return personRepository.findById(id);
     }
 
     @Override
-    public Person findById(Integer id) {
-        return personRepository.findById(id);
+    public Person save(final Person person) {
+        return personRepository.save(person);
     }
 }

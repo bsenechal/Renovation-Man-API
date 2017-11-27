@@ -10,7 +10,7 @@ public interface IPersonRepository extends CrudRepository<Person, Long> {
 
     @Override
     public List<Person> findAll();
-    
+
     public Person findById(Integer id);
 
 }

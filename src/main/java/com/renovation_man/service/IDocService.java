@@ -6,12 +6,12 @@ import com.renovation_man.model.Doc;
 
 public interface IDocService {
     public List<Doc> findAll();
-    
-    public Doc save(final Doc doc);
-    
-    public List<Doc> findById(Integer id);
-    
+
     public List<Doc> findByAuthorId(Integer authorId);
-    
+
+    public List<Doc> findById(Integer id);
+
     public Doc findLastVersionById(Integer docId);
+
+    public Doc save(final Doc doc);
 }

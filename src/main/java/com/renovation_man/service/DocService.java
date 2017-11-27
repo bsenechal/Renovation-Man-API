@@ -15,44 +15,44 @@ import com.renovation_man.repository.IDocRepository;
 public class DocService implements IDocService {
     @Autowired
     IDocRepository docRepository;
-    
+
     @Override
     public List<Doc> findAll() {
         return docRepository.findAll();
     }
 
     @Override
-    public Doc save(Doc doc) {
-    	Integer versionNumber = docRepository.findLastVersionNumberForId(doc.getId());
-    	
-    	
-    	if (doc.getId() == null) {
-    		Integer maxId = docRepository.findMaxId();
-    		
-    		doc.setId(maxId != null ? maxId + 1 : 1);
-    		doc.setVersionNumber(1);
-    	} else {
-        	if (versionNumber != null) {
-        		doc.setVersionNumber(versionNumber + 1);
-        	}
-    	}
-    	
-		return docRepository.save(doc);
+    public List<Doc> findByAuthorId(final Integer authorId) {
+        return docRepository.findByAuthorId(authorId);
     }
 
     @Override
-    public List<Doc> findById(Integer id) {
+    public List<Doc> findById(final Integer id) {
         return docRepository.findById(id);
     }
 
     @Override
-    public List<Doc> findByAuthorId(Integer authorId) {
-        return docRepository.findByAuthorId(authorId);
+    public Doc findLastVersionById(final Integer id) {
+        return docRepository.findLastVersionById(id);
     }
 
-	@Override
-	public Doc findLastVersionById(Integer id) {
-		return docRepository.findLastVersionById(id);
-	}
+    @Override
+    public Doc save(final Doc doc) {
+        final Integer versionNumber = docRepository.findLastVersionNumberForId(doc.getId());
+
+        if (doc.getId() == null) {
+            final Integer maxId = docRepository.findMaxId();
+
+            doc.setId(maxId != null ? maxId + 1 : 1);
+            doc.setVersionNumber(1);
+        }
+        else {
+            if (versionNumber != null) {
+                doc.setVersionNumber(versionNumber + 1);
+            }
+        }
+
+        return docRepository.save(doc);
+    }
 
 }

@@ -22,15 +22,13 @@ public class CompanyService implements IUserService<Company> {
     }
 
     @Override
-    public Company save(Company company) {
-        return companyRepository.save(company);
+    public Company findById(final Integer id) {
+        return companyRepository.findById(id);
     }
 
     @Override
-    public Company findById(Integer id) {
-        return companyRepository.findById(id);
+    public Company save(final Company company) {
+        return companyRepository.save(company);
     }
-    
-    
 
 }

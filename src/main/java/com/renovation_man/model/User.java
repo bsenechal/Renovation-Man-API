@@ -18,16 +18,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = Person.class, name = "PERSON"),
-    @JsonSubTypes.Type(value = Company.class, name = "COMPANY")})
+        @JsonSubTypes.Type(value = Person.class, name = "PERSON"),
+        @JsonSubTypes.Type(value = Company.class, name = "COMPANY") })
 @MappedSuperclass
 public abstract class User implements Serializable {
     @Transient
     private static final long serialVersionUID = 2162192344911028801L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "user_seq_gen")
-    @SequenceGenerator(name = "user_seq_gen", allocationSize=1, sequenceName = "USER_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
+    @SequenceGenerator(name = "user_seq_gen", allocationSize = 1, sequenceName = "USER_SEQ")
     @Column(name = "ID", precision = 12, scale = 0)
     private Integer id;
 
@@ -54,7 +54,7 @@ public abstract class User implements Serializable {
      * @param id
      *            the id to set
      */
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -62,7 +62,7 @@ public abstract class User implements Serializable {
      * @param type
      *            the type to set
      */
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 

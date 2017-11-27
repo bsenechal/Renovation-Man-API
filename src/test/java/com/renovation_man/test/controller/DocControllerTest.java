@@ -26,72 +26,72 @@ import com.renovation_man.service.IDocService;
 @SpringBootTest(classes = DocController.class)
 @AutoConfigureMockMvc
 public class DocControllerTest {
-	@Autowired
-	private MockMvc mockMvc;
+    private static final String docTestJSON = "{\"id\":1,\"versionNumber\":2,\"text\":\"## Installation\n\nProvide code examples and explanations of how to get the project.\",\"authorId\":1}";
 
-	@MockBean
-	private IDocService docService;
+    private List<Doc> docList;
 
-	private Doc docTest;
+    @MockBean
+    private IDocService docService;
 
-	private List<Doc> docList;
+    private Doc docTest;
 
-	private static final String docTestJSON = "{\"id\":1,\"versionNumber\":2,\"text\":\"## Installation\n\nProvide code examples and explanations of how to get the project.\",\"authorId\":1}";
+    @Autowired
+    private MockMvc mockMvc;
 
-	@Before
-	public void initObjects() {
-		docTest = new Doc(
-				1,
-				2,
-				"## Installation\n\nProvide code examples and explanations of how to get the project.",
-				1);
+    @Test
+    public void getAllDocsTest() throws Exception {
 
-		docList = new ArrayList<Doc>();
+        when(docService.findAll()).thenReturn(docList);
 
-		docList.add(docTest);
-	}
+        this.mockMvc.perform(get("/docs")).andExpect(status().isOk())
+                .andExpect(content().json("[" + docTestJSON + "]"));
+    }
 
-	@Test
-	public void getAllDocsTest() throws Exception {
+    @Test
+    public void getAllVersionsDocTest() throws Exception {
+        when(docService.findById(1)).thenReturn(docList);
 
-		when(docService.findAll()).thenReturn(docList);
+        this.mockMvc.perform(get("/docs/1/versions"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[" + docTestJSON + "]"));
+    }
 
-		this.mockMvc.perform(get("/docs")).andExpect(status().isOk())
-				.andExpect(content().json("[" + docTestJSON + "]"));
-	}
+    @Test
+    public void getDocByIdTest() throws Exception {
+        when(docService.findLastVersionById(1)).thenReturn(docTest);
 
-	@Test
-	public void getDocsCreatedByTest() throws Exception {
-		when(docService.findByAuthorId(1)).thenReturn(docList);
+        this.mockMvc.perform(get("/docs/1")).andExpect(status().isOk())
+                .andExpect(content().json(docTestJSON));
+    }
 
-		this.mockMvc.perform(get("/docs/created_by/1"))
-				.andExpect(status().isOk())
-				.andExpect(content().json("[" + docTestJSON + "]"));
-	}
+    @Test
+    public void getDocsCreatedByTest() throws Exception {
+        when(docService.findByAuthorId(1)).thenReturn(docList);
 
-	@Test
-	public void getDocsCreatedOrModifiedByTest() throws Exception {
-		when(docService.findByAuthorId(1)).thenReturn(docList);
+        this.mockMvc.perform(get("/docs/created_by/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[" + docTestJSON + "]"));
+    }
 
-		this.mockMvc.perform(get("/docs/created_or_modified_by/1"))
-				.andExpect(status().isOk())
-				.andExpect(content().json("[" + docTestJSON + "]"));
-	}
+    @Test
+    public void getDocsCreatedOrModifiedByTest() throws Exception {
+        when(docService.findByAuthorId(1)).thenReturn(docList);
 
-	@Test
-	public void getDocByIdTest() throws Exception {
-		when(docService.findLastVersionById(1)).thenReturn(docTest);
+        this.mockMvc.perform(get("/docs/created_or_modified_by/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[" + docTestJSON + "]"));
+    }
 
-		this.mockMvc.perform(get("/docs/1")).andExpect(status().isOk())
-				.andExpect(content().json(docTestJSON));
-	}
+    @Before
+    public void initObjects() {
+        docTest = new Doc(
+                1,
+                2,
+                "## Installation\n\nProvide code examples and explanations of how to get the project.",
+                1);
 
-	@Test
-	public void getAllVersionsDocTest() throws Exception {
-		when(docService.findById(1)).thenReturn(docList);
+        docList = new ArrayList<Doc>();
 
-		this.mockMvc.perform(get("/docs/1/versions"))
-				.andExpect(status().isOk())
-				.andExpect(content().json("[" + docTestJSON + "]"));
-	}
+        docList.add(docTest);
+    }
 }

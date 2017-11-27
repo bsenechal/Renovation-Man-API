@@ -1,7 +1,6 @@
 package com.renovation_man.service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -16,79 +15,79 @@ import com.renovation_man.model.User;
 @Service
 @Transactional
 public class UserService implements IUserService<User> {
-	@Autowired
-	IUserService<Person> personService;
+    @Autowired
+    IUserService<Company> companyService;
 
-	@Autowired
-	IUserService<Company> companyService;
+    @Autowired
+    IUserService<Person> personService;
 
-	public List<User> findAll() {
-		List<User> userList = new ArrayList<User>();
+    @Override
+    public List<User> findAll() {
+        final List<User> userList = new ArrayList<User>();
 
-		userList.addAll(personService.findAll());
+        userList.addAll(personService.findAll());
 
-		userList.addAll(companyService.findAll());
+        userList.addAll(companyService.findAll());
 
-		userList.sort(new Comparator<User>() {
-			@Override
-			public int compare(User o1, User o2) {
-				if (o1.getId() == o2.getId())
-					return 0;
-				return o1.getId() < o2.getId() ? -1 : 1;
-			}
-		});
-		return userList;
-	}
+        userList.sort((o1, o2) -> {
+            if (o1.getId() == o2.getId()) {
+                return 0;
+            }
+            return o1.getId() < o2.getId() ? -1 : 1;
+        });
+        return userList;
+    }
 
-	@Override
-	public User findById(Integer id) {
-		User user = personService.findById(id);
+    @Override
+    public User findById(final Integer id) {
+        final User user = personService.findById(id);
 
-		if (user != null) {
-			return user;
-		} else {
-			return companyService.findById(id);
-		}
-	}
+        if (user != null) {
+            return user;
+        }
+        else {
+            return companyService.findById(id);
+        }
+    }
 
-	@Override
-	public User save(User user) {
-		User result = null;
+    @Override
+    public User save(final User user) {
+        User result = null;
 
-		switch (user.getType()) {
-		case "PERSON":
-			Person person = personService.findById(user.getId());
+        switch (user.getType()) {
+            case "PERSON":
+                Person person = personService.findById(user.getId());
 
-			if (person != null) {
-				result = new Person(person);
-			}
+                if (person != null) {
+                    result = new Person(person);
+                }
 
-			person = personService.save((Person) user);
+                person = personService.save((Person) user);
 
-			if (result == null) {
-				return person;
-			}
+                if (result == null) {
+                    return person;
+                }
 
-			break;
+                break;
 
-		case "COMPANY":
-			Company company = companyService.findById(user.getId());
+            case "COMPANY":
+                Company company = companyService.findById(user.getId());
 
-			if (company != null) {
-				result = new Company(company);
-			}
+                if (company != null) {
+                    result = new Company(company);
+                }
 
-			company = companyService.save((Company) user);
+                company = companyService.save((Company) user);
 
-			if (result == null) {
-				return company;
-			}
+                if (result == null) {
+                    return company;
+                }
 
-			break;
-		default:
-			// On met à null le user pour montrer qu'il y a une erreur
-			result = null;
-		}
-		return result;
-	}
+                break;
+            default:
+                // On met à null le user pour montrer qu'il y a une erreur
+                result = null;
+        }
+        return result;
+    }
 }

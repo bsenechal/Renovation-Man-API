@@ -31,73 +31,71 @@ import com.renovation_man.service.IUserService;
 @SpringBootTest(classes = UserController.class)
 @AutoConfigureMockMvc
 public class UserControllerTest {
-	
-	@Autowired
-	private MockMvc mockMvc;
 
-	@MockBean
-	private IUserService<User> userService;
+    private static final String companyTestJSON = "{\"type\":\"COMPANY\",\"id\":2,\"type\":\"COMPANY\",\"name\":\"Renovation Man\",\"businessEntityType\":\"Unlimited\"}";
 
-	@MockBean
-	private IUserService<Company> companyService;
+    private static final String personTestJSON = "{\"type\":\"PERSON\",\"id\":1,\"type\":\"PERSON\",\"firstName\":\"Pawel\",\"lastName\":\"Wilk\",\"dateOfBirth\":451461600000}";
 
-	@MockBean
-	private IUserService<Person> personService;
-	
-	private Company companyTest;
-	
-	private Person personTest;
-	
-	private static final String companyTestJSON = "{\"type\":\"COMPANY\",\"id\":2,\"type\":\"COMPANY\",\"name\":\"Renovation Man\",\"businessEntityType\":\"Unlimited\"}";
-	
-	private static final String personTestJSON = "{\"type\":\"PERSON\",\"id\":1,\"type\":\"PERSON\",\"firstName\":\"Pawel\",\"lastName\":\"Wilk\",\"dateOfBirth\":451461600000}";
-	
-	
-	  @Before
-	    public void initObjects() {
-		  personTest = new Person(1, "PERSON", "Pawel", "Wilk", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
-		  
-		  companyTest = new Company(2,"COMPANY", "Renovation Man", "Unlimited");
-	    }
-	  
-	@Test
-	public void getAllUsersTest() throws Exception {
-		List<User> userList = new ArrayList<User>();
-		userList.add(personTest);
-		userList.add(companyTest);
-		
-		when(userService.findAll()).thenReturn(userList);
+    @MockBean
+    private IUserService<Company> companyService;
 
-		this.mockMvc.perform(get("/users"))
-				.andExpect(status().isOk()).andExpect(content().json("[" + personTestJSON + "," + companyTestJSON + "]"));
-	}
+    private Company companyTest;
 
-	@Test
-	public void getAllCompaniesTest() throws Exception {
-		List<Company> companyList = new ArrayList<Company>();
-		companyList.add(companyTest);
-		when(companyService.findAll()).thenReturn(companyList);
+    @Autowired
+    private MockMvc mockMvc;
 
-		this.mockMvc.perform(get("/users/companies"))
-				.andExpect(status().isOk()).andExpect(content().json("[" + companyTestJSON + "]"));
-	}
-	
-	@Test
-	public void getAllPersonsTest() throws Exception {
-		List<Person> personList = new ArrayList<Person>();
-		personList.add(personTest);
-		when(personService.findAll()).thenReturn(personList);
+    @MockBean
+    private IUserService<Person> personService;
 
-		this.mockMvc.perform(get("/users/persons"))
-				.andExpect(status().isOk()).andExpect(content().json("[" + personTestJSON + "]"));
-	}
-	
-	
-	@Test
-	public void getUserByIdTest() throws Exception {
-		when(userService.findById(1)).thenReturn(personTest);
+    private Person personTest;
 
-		this.mockMvc.perform(get("/users/1")).andDo(print())
-				.andExpect(status().isOk()).andExpect(content().json(personTestJSON));
-	}
+    @MockBean
+    private IUserService<User> userService;
+
+    @Test
+    public void getAllCompaniesTest() throws Exception {
+        final List<Company> companyList = new ArrayList<Company>();
+        companyList.add(companyTest);
+        when(companyService.findAll()).thenReturn(companyList);
+
+        this.mockMvc.perform(get("/users/companies"))
+                .andExpect(status().isOk()).andExpect(content().json("[" + companyTestJSON + "]"));
+    }
+
+    @Test
+    public void getAllPersonsTest() throws Exception {
+        final List<Person> personList = new ArrayList<Person>();
+        personList.add(personTest);
+        when(personService.findAll()).thenReturn(personList);
+
+        this.mockMvc.perform(get("/users/persons"))
+                .andExpect(status().isOk()).andExpect(content().json("[" + personTestJSON + "]"));
+    }
+
+    @Test
+    public void getAllUsersTest() throws Exception {
+        final List<User> userList = new ArrayList<User>();
+        userList.add(personTest);
+        userList.add(companyTest);
+
+        when(userService.findAll()).thenReturn(userList);
+
+        this.mockMvc.perform(get("/users"))
+                .andExpect(status().isOk()).andExpect(content().json("[" + personTestJSON + "," + companyTestJSON + "]"));
+    }
+
+    @Test
+    public void getUserByIdTest() throws Exception {
+        when(userService.findById(1)).thenReturn(personTest);
+
+        this.mockMvc.perform(get("/users/1")).andDo(print())
+                .andExpect(status().isOk()).andExpect(content().json(personTestJSON));
+    }
+
+    @Before
+    public void initObjects() {
+        personTest = new Person(1, "PERSON", "Pawel", "Wilk", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
+
+        companyTest = new Company(2, "COMPANY", "Renovation Man", "Unlimited");
+    }
 }

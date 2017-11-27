@@ -38,22 +38,22 @@ import com.renovation_man.model.Doc;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class DocControllerIT {
-	private static final String URL = "http://localhost:";
+    private static final String URL = "http://localhost:";
+
+    private HttpHeaders headers = new HttpHeaders();
 
     @LocalServerPort
     private int port;
 
-    TestRestTemplate restTemplate = new TestRestTemplate();
-
-    HttpHeaders headers = new HttpHeaders();
+    private TestRestTemplate restTemplate = new TestRestTemplate();
 
     @Test
     public void addDocIT() {
-        Doc doc = new Doc("## Synopsis\nAt the top of the file there should be a short introduction and/ or overview.", 1);
+        final Doc doc = new Doc("## Synopsis\nAt the top of the file there should be a short introduction and/ or overview.", 1);
 
-        HttpEntity<Doc> entity = new HttpEntity<Doc>(doc, headers);
+        final HttpEntity<Doc> entity = new HttpEntity<Doc>(doc, headers);
 
-        ResponseEntity<Doc> response = restTemplate.exchange(
+        final ResponseEntity<Doc> response = restTemplate.exchange(
                 createURLWithPort("/docs"),
                 HttpMethod.POST, entity, Doc.class);
 
@@ -64,28 +64,25 @@ public class DocControllerIT {
         Assert.assertEquals("Incorrect author id", doc.getAuthorId(), response.getBody().getAuthorId());
     }
 
-    private String createURLWithPort(String uri) {
+    private String createURLWithPort(final String uri) {
         return URL + port + uri;
     }
 
-    
     @Test
     public void updateDocIT() {
-    	
-    	Doc doc = new Doc("UPDATED GOOGLE NOTICE BY GERARD MENDES. Please Be Advised !!!", 1);
-        
-        HttpEntity<Doc> entity = new HttpEntity<Doc>(doc, headers);
 
-        ResponseEntity<Doc> response = restTemplate.exchange(
+        final Doc doc = new Doc("UPDATED GOOGLE NOTICE BY GERARD MENDES. Please Be Advised !!!", 1);
+
+        final HttpEntity<Doc> entity = new HttpEntity<Doc>(doc, headers);
+
+        final ResponseEntity<Doc> response = restTemplate.exchange(
                 createURLWithPort("/docs/1"),
                 HttpMethod.POST, entity, Doc.class);
 
         doc.setId(1);
         doc.setVersionNumber(2);
-        
+
         Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("Incorrect response", doc, response.getBody());
     }
-    
-
 }

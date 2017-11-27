@@ -23,52 +23,52 @@ import com.renovation_man.service.IUserService;
 @RequestMapping(value = "users")
 public class UserController {
 
-	@Autowired
-	IUserService<Company> companyService;
+    @Autowired
+    IUserService<Company> companyService;
 
-	@Autowired
-	IUserService<Person> personService;
+    @Autowired
+    IUserService<Person> personService;
 
-	@Autowired
-	IUserService<User> userService;
+    @Autowired
+    IUserService<User> userService;
 
-	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public List<User> findAllUsers() {
-		return userService.findAll();
-	}
+    @RequestMapping(value = "", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public User addUser(@Valid @RequestBody final User user) {
+        return userService.save(user);
+    }
 
-	@RequestMapping(value = "", method = RequestMethod.POST, produces = "application/json")
-	@ResponseBody
-	public User addUser(@Valid @RequestBody User user) {
-		return userService.save(user);
-	}
+    @RequestMapping(value = "/companies", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<Company> findAllCompanies() {
+        return companyService.findAll();
+    }
 
-	@RequestMapping(value = "/{user_Id}", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public User findByUserId(
-			@PathVariable(value = "user_Id", required = true) Integer userId) {
-		return userService.findById(userId);
-	}
+    @RequestMapping(value = "/persons", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<Person> findAllPersons() {
+        return personService.findAll();
+    }
 
-	@RequestMapping(value = "/{user_id}", method = RequestMethod.POST, produces = "application/json")
-	@ResponseBody
-	public User updateUser(@Valid @RequestBody User user,
-			@PathVariable(value = "user_id", required = true) Integer userId) {
-		user.setId(userId);
-		return userService.save(user);
-	}
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<User> findAllUsers() {
+        return userService.findAll();
+    }
 
-	@RequestMapping(value = "/persons", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public List<Person> findAllPersons() {
-		return personService.findAll();
-	}
+    @RequestMapping(value = "/{user_Id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public User findByUserId(
+            @PathVariable(value = "user_Id", required = true) final Integer userId) {
+        return userService.findById(userId);
+    }
 
-	@RequestMapping(value = "/companies", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public List<Company> findAllCompanies() {
-		return companyService.findAll();
-	}
+    @RequestMapping(value = "/{user_id}", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public User updateUser(@Valid @RequestBody final User user,
+            @PathVariable(value = "user_id", required = true) final Integer userId) {
+        user.setId(userId);
+        return userService.save(user);
+    }
 
 }

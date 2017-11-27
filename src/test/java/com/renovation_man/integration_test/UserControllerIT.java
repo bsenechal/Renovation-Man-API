@@ -43,39 +43,38 @@ import com.renovation_man.model.Person;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class UserControllerIT {
     private static final String URL = "http://localhost:";
-    
+
+    private HttpHeaders headers = new HttpHeaders();
+
     @LocalServerPort
     private int port;
 
-    TestRestTemplate restTemplate = new TestRestTemplate();
-
-    HttpHeaders headers = new HttpHeaders();
+    private TestRestTemplate restTemplate = new TestRestTemplate();
 
     @Test
     public void addCompanyIT() {
-        Company company = new Company("COMPANY", "Google", "LLC");
-        
-        HttpEntity<Company> entityCompany = new HttpEntity<Company>(company, headers);
+        final Company company = new Company("COMPANY", "Google", "LLC");
 
-        ResponseEntity<Company> response = restTemplate.exchange(
+        final HttpEntity<Company> entityCompany = new HttpEntity<Company>(company, headers);
+
+        final ResponseEntity<Company> response = restTemplate.exchange(
                 createURLWithPort("/users"),
                 HttpMethod.POST, entityCompany, Company.class);
-        
+
         Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("Incorrect type", company.getType(), response.getBody().getType());
         Assert.assertEquals("Incorrect name", company.getName(), response.getBody().getName());
         Assert.assertEquals("Incorrect business entity type", company.getBusinessEntityType(), response.getBody().getBusinessEntityType());
     }
-    
-    
+
     @Test
     public void addPersonIT() {
-    	
-        Person person = new Person("PERSON", "Paul", "Wik", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
-        
-        HttpEntity<Person> entity = new HttpEntity<Person>(person, headers);
 
-        ResponseEntity<Person> response = restTemplate.exchange(
+        final Person person = new Person("PERSON", "Paul", "Wik", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
+
+        final HttpEntity<Person> entity = new HttpEntity<Person>(person, headers);
+
+        final ResponseEntity<Person> response = restTemplate.exchange(
                 createURLWithPort("/users"),
                 HttpMethod.POST, entity, Person.class);
 
@@ -86,36 +85,21 @@ public class UserControllerIT {
         Assert.assertEquals("Incorrect date of birth", person.getDateOfBirth(), response.getBody().getDateOfBirth());
     }
 
-    
-    @Test
-    public void updatePersonIT() {
-    	
-        Person person = new Person("PERSON", "Paul", "Wilk", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
-        
-        Person personBeforeUpdate = new Person(2, "PERSON", "Paul", "Wik", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
-        
-        
-        HttpEntity<Person> entity = new HttpEntity<Person>(person, headers);
-
-        ResponseEntity<Person> response = restTemplate.exchange(
-                createURLWithPort("/users/2"),
-                HttpMethod.POST, entity, Person.class);
-
-        Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("Incorrect response", personBeforeUpdate, response.getBody());
+    private String createURLWithPort(final String uri) {
+        return URL + port + uri;
     }
-    
+
     @Test
     public void updateCompanyIT() {
-    	
-        Company company = new Company("COMPANY", "Alphabet", "LLC ");
-        
-        Company companyBeforeUpdate = new Company(1, "COMPANY", "Google", "LLC");;
-        
-        
-        HttpEntity<Company> entity = new HttpEntity<Company>(company, headers);
 
-        ResponseEntity<Company> response = restTemplate.exchange(
+        final Company company = new Company("COMPANY", "Alphabet", "LLC ");
+
+        final Company companyBeforeUpdate = new Company(1, "COMPANY", "Google", "LLC");
+        ;
+
+        final HttpEntity<Company> entity = new HttpEntity<Company>(company, headers);
+
+        final ResponseEntity<Company> response = restTemplate.exchange(
                 createURLWithPort("/users/1"),
                 HttpMethod.POST, entity, Company.class);
 
@@ -123,7 +107,20 @@ public class UserControllerIT {
         Assert.assertEquals("Incorrect response", companyBeforeUpdate, response.getBody());
     }
 
-    private String createURLWithPort(String uri) {
-        return URL + port + uri;
+    @Test
+    public void updatePersonIT() {
+
+        final Person person = new Person("PERSON", "Paul", "Wilk", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
+
+        final Person personBeforeUpdate = new Person(2, "PERSON", "Paul", "Wik", Date.from(Instant.parse("1984-04-22T06:00:00Z")));
+
+        final HttpEntity<Person> entity = new HttpEntity<Person>(person, headers);
+
+        final ResponseEntity<Person> response = restTemplate.exchange(
+                createURLWithPort("/users/2"),
+                HttpMethod.POST, entity, Person.class);
+
+        Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("Incorrect response", personBeforeUpdate, response.getBody());
     }
 }

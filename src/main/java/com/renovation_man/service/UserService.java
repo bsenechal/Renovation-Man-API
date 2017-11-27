@@ -92,7 +92,7 @@ public class UserService implements IUserService<User> {
 			break;
 		default:
 			// On met à null le user pour montrer qu'il y a une erreur
-			return null;
+			result = null;
 		}
 		return result;
 	}

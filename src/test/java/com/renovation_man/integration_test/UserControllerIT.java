@@ -18,7 +18,6 @@ package com.renovation_man.integration_test;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,7 +36,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.renovation_man.application.Application;
 import com.renovation_man.model.Company;
 import com.renovation_man.model.Person;
-import com.renovation_man.model.User;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

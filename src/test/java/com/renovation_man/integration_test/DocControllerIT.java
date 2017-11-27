@@ -16,6 +16,7 @@
 
 package com.renovation_man.integration_test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -35,7 +37,7 @@ import com.renovation_man.model.Doc;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application.properties")
 public class DocControllerIT {
-    
+	private static final String URL = "http://localhost:";
 
     @LocalServerPort
     private int port;
@@ -59,18 +61,8 @@ public class DocControllerIT {
     }
 
     @Test
-    public void addDoc() {
-//        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-//        Map map = new HashMap<String, String>();
-//        map.put("Content-Type", "application/json");
-//
-//        headers.setAll(map);
-//        
-        Doc doc = new Doc();
-        doc.setId(1);
-        doc.setAuthorId(1);
-        doc.setText("test2");
-        doc.setVersionNumber(1);
+    public void addDocIT() {
+        Doc doc = new Doc("## Synopsis\nAt the top of the file there should be a short introduction and/ or overview.", 1);
 
         HttpEntity<Doc> entity = new HttpEntity<Doc>(doc, headers);
 
@@ -78,16 +70,36 @@ public class DocControllerIT {
                 createURLWithPort("/docs"),
                 HttpMethod.POST, entity, Doc.class);
 
-//        String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
-
-//        assertTrue(actual.contains("/docs"));
-
+        Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("Incorrect id", new Integer(1), response.getBody().getId());
+        Assert.assertEquals("Incorrect version number", new Integer(0), response.getBody().getVersionNumber());
+        Assert.assertEquals("Incorrect text", doc.getText(), response.getBody().getText());
+        Assert.assertEquals("Incorrect author id", doc.getAuthorId(), response.getBody().getAuthorId());
     }
 
     private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
+        return URL + port + uri;
     }
 
+    
+    @Test
+    public void updateDocIT() {
+    	
+    	Doc doc = new Doc("UPDATED GOOGLE NOTICE BY GERARD MENDES. Please Be Advised !!!", 1);
+        
+        HttpEntity<Doc> entity = new HttpEntity<Doc>(doc, headers);
+
+        ResponseEntity<Doc> response = restTemplate.exchange(
+                createURLWithPort("/docs/1"),
+                HttpMethod.POST, entity, Doc.class);
+
+        doc.setId(1);
+        doc.setVersionNumber(1);
+        
+        Assert.assertEquals("Incorrect status code", HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("Incorrect response", doc, response.getBody());
+    }
+    
 //
 //    @Autowired
 //    private MockMvc mockMvc;

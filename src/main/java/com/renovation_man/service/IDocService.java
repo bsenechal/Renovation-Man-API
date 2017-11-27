@@ -9,7 +9,9 @@ public interface IDocService {
     
     public Doc save(final Doc doc);
     
-    public Doc findById(Integer id);
+    public List<Doc> findById(Integer id);
     
     public List<Doc> findByAuthorId(Integer authorId);
+    
+    public Doc findLastVersionById(Integer docId);
 }

@@ -23,11 +23,11 @@ public class DocService implements IDocService {
 
     @Override
     public Doc save(Doc doc) {
-        return docRepository.save(doc);
+		return docRepository.save(doc);
     }
 
     @Override
-    public Doc findById(Integer id) {
+    public List<Doc> findById(Integer id) {
         return docRepository.findById(id);
     }
 
@@ -35,5 +35,10 @@ public class DocService implements IDocService {
     public List<Doc> findByAuthorId(Integer authorId) {
         return docRepository.findByAuthorId(authorId);
     }
+
+	@Override
+	public Doc findLastVersionById(Integer id) {
+		return docRepository.findLastVersionById(id);
+	}
 
 }

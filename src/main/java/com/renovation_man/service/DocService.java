@@ -37,10 +37,6 @@ public class DocService implements IDocService {
         	}
     	}
     	
-
-    	
-
-    	
 		return docRepository.save(doc);
     }
 

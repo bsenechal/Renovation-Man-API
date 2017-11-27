@@ -54,41 +54,36 @@ public class UserService implements IUserService<User> {
 	@Override
 	public User save(User user) {
 		User result = null;
-		
+
 		switch (user.getType()) {
 		case "PERSON":
 			Person person = personService.findById(user.getId());
-			
-			
+
 			if (person != null) {
 				result = new Person(person);
 			}
-			
+
 			person = personService.save((Person) user);
-			
-			
+
 			if (result == null) {
 				return person;
 			}
-			
+
 			break;
-			
+
 		case "COMPANY":
 			Company company = companyService.findById(user.getId());
-			
-			
+
 			if (company != null) {
 				result = new Company(company);
 			}
-			
+
 			company = companyService.save((Company) user);
-			
-			
+
 			if (result == null) {
 				return company;
 			}
-			
-			
+
 			break;
 		default:
 			// On met à null le user pour montrer qu'il y a une erreur

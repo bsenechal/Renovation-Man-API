@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.renovation_man.model.Company;
 import com.renovation_man.model.Person;
@@ -18,6 +19,7 @@ import com.renovation_man.model.User;
 import com.renovation_man.service.IUserService;
 
 @Controller
+@EnableWebMvc
 @RequestMapping(value = "users")
 public class UserController {
 
@@ -30,8 +32,6 @@ public class UserController {
 	@Autowired
 	IUserService<User> userService;
 
-
-
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<User> findAllUsers() {
@@ -43,8 +43,8 @@ public class UserController {
 	public User addUser(@Valid @RequestBody User user) {
 		return userService.save(user);
 	}
-	
-	@RequestMapping(value = "/{user_id}", method = RequestMethod.GET, produces = "application/json")
+
+	@RequestMapping(value = "/{user_Id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public User findByUserId(
 			@PathVariable(value = "user_Id", required = true) Integer userId) {

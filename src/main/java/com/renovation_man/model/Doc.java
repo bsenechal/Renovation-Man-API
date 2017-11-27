@@ -54,6 +54,14 @@ public class Doc implements Serializable {
 		this.authorId = authorId;
 	}
     
+    public Doc(Integer id, Integer versionNumber, String text, Integer authorId) {
+		super();
+		this.id = id;
+		this.versionNumber = versionNumber;
+		this.text = text;
+		this.authorId = authorId;
+	}
+    
     
     public Doc(Doc doc) {
 		super();

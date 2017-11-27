@@ -1,4 +1,4 @@
-package com.renovation_man.test;
+package com.renovation_man.test.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +34,8 @@ public class DocControllerTest {
 
 	private Doc docTest;
 
+	private List<Doc> docList;
+
 	private static final String docTestJSON = "{\"id\":1,\"versionNumber\":2,\"text\":\"## Installation\n\nProvide code examples and explanations of how to get the project.\",\"authorId\":1}";
 
 	@Before
@@ -43,12 +45,14 @@ public class DocControllerTest {
 				2,
 				"## Installation\n\nProvide code examples and explanations of how to get the project.",
 				1);
+
+		docList = new ArrayList<Doc>();
+
+		docList.add(docTest);
 	}
 
 	@Test
 	public void getAllDocsTest() throws Exception {
-		List<Doc> docList = new ArrayList<Doc>();
-		docList.add(docTest);
 
 		when(docService.findAll()).thenReturn(docList);
 
@@ -58,9 +62,6 @@ public class DocControllerTest {
 
 	@Test
 	public void getDocsCreatedByTest() throws Exception {
-		List<Doc> docList = new ArrayList<Doc>();
-		docList.add(docTest);
-
 		when(docService.findByAuthorId(1)).thenReturn(docList);
 
 		this.mockMvc.perform(get("/docs/created_by/1"))
@@ -70,9 +71,6 @@ public class DocControllerTest {
 
 	@Test
 	public void getDocsCreatedOrModifiedByTest() throws Exception {
-		List<Doc> docList = new ArrayList<Doc>();
-		docList.add(docTest);
-
 		when(docService.findByAuthorId(1)).thenReturn(docList);
 
 		this.mockMvc.perform(get("/docs/created_or_modified_by/1"))
@@ -90,9 +88,6 @@ public class DocControllerTest {
 
 	@Test
 	public void getAllVersionsDocTest() throws Exception {
-		List<Doc> docList = new ArrayList<Doc>();
-		docList.add(docTest);
-
 		when(docService.findById(1)).thenReturn(docList);
 
 		this.mockMvc.perform(get("/docs/1/versions"))

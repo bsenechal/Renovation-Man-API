@@ -1,4 +1,4 @@
-package com.renovation_man.test;
+package com.renovation_man.test.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
